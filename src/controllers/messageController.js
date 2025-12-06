@@ -51,12 +51,14 @@ exports.getConversations = asyncHandler(async (req, res, next) => {
   const userId = req.user.id;
 
   // Get unique users that have conversation with current user
+  const userObjectId = new mongoose.Types.ObjectId(userId);
+  
   const conversations = await Message.aggregate([
     {
       $match: {
         $or: [
-          { sender: mongoose.Types.ObjectId(userId) },
-          { receiver: mongoose.Types.ObjectId(userId) }
+          { sender: userObjectId },
+          { receiver: userObjectId }
         ],
         isDeleted: false
       }
@@ -68,7 +70,7 @@ exports.getConversations = asyncHandler(async (req, res, next) => {
       $group: {
         _id: {
           $cond: [
-            { $eq: ['$sender', mongoose.Types.ObjectId(userId)] },
+            { $eq: ['$sender', userObjectId] },
             '$receiver',
             '$sender'
           ]
@@ -79,7 +81,7 @@ exports.getConversations = asyncHandler(async (req, res, next) => {
             $cond: [
               {
                 $and: [
-                  { $eq: ['$receiver', mongoose.Types.ObjectId(userId)] },
+                  { $eq: ['$receiver', userObjectId] },
                   { $eq: ['$isRead', false] }
                 ]
               },

@@ -27,7 +27,7 @@ router.get('/:id', objectIdValidation('id'), validate, getVideo);
 router.put('/:id', protect, objectIdValidation('id'), validate, updateVideo);
 router.delete('/:id', protect, objectIdValidation('id'), validate, deleteVideo);
 router.post('/:id/like', protect, objectIdValidation('id'), validate, likeVideo);
-router.post('/:id/comments', protect, objectIdValidation('id'), validate, createCommentValidation, validate, addComment);
+router.post('/:id/comments', protect, objectIdValidation('id'), createCommentValidation, validate, addComment);
 router.delete('/:id/comments/:commentId', protect, objectIdValidation('id'), validate, deleteComment);
 
 module.exports = router;
