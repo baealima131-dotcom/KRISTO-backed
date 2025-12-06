@@ -107,6 +107,19 @@ dist
 # Docusaurus cache and generated files
 .docusaurus
 
+# Uploaded files (keep directories with .gitkeep)
+uploads/*
+!uploads/.gitkeep
+!uploads/avatars/
+!uploads/posts/
+!uploads/videos/
+uploads/avatars/*
+!uploads/avatars/.gitkeep
+uploads/posts/*
+!uploads/posts/.gitkeep
+uploads/videos/*
+!uploads/videos/.gitkeep
+
 # Serverless directories
 .serverless/
 
