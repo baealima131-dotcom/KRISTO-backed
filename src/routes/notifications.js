@@ -11,13 +11,14 @@ const {
 } = require('../controllers/notificationController');
 const { protect } = require('../middleware/auth');
 const { objectIdValidation, validate } = require('../middleware/validator');
+const { apiLimiter } = require('../middleware/rateLimiter');
 
-router.get('/', protect, getNotifications);
-router.get('/unread/count', protect, getUnreadCount);
-router.put('/read-all', protect, markAllAsRead);
-router.delete('/', protect, deleteAllNotifications);
-router.get('/:id', protect, objectIdValidation('id'), validate, getNotification);
-router.put('/:id/read', protect, objectIdValidation('id'), validate, markAsRead);
-router.delete('/:id', protect, objectIdValidation('id'), validate, deleteNotification);
+router.get('/', apiLimiter, protect, getNotifications);
+router.get('/unread/count', apiLimiter, protect, getUnreadCount);
+router.put('/read-all', apiLimiter, protect, markAllAsRead);
+router.delete('/', apiLimiter, protect, deleteAllNotifications);
+router.get('/:id', apiLimiter, protect, objectIdValidation('id'), validate, getNotification);
+router.put('/:id/read', apiLimiter, protect, objectIdValidation('id'), validate, markAsRead);
+router.delete('/:id', apiLimiter, protect, objectIdValidation('id'), validate, deleteNotification);
 
 module.exports = router;

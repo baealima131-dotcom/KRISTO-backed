@@ -17,15 +17,16 @@ const {
   objectIdValidation
 } = require('../middleware/validator');
 const upload = require('../config/multer');
+const { apiLimiter, uploadLimiter } = require('../middleware/rateLimiter');
 
-router.get('/me', protect, getMyProfile);
-router.put('/me', protect, updateProfileValidation, validate, updateProfile);
-router.post('/avatar', protect, upload.single('avatar'), uploadAvatar);
+router.get('/me', apiLimiter, protect, getMyProfile);
+router.put('/me', apiLimiter, protect, updateProfileValidation, validate, updateProfile);
+router.post('/avatar', uploadLimiter, protect, upload.single('avatar'), uploadAvatar);
 
-router.get('/:userId', objectIdValidation('userId'), validate, getProfile);
-router.post('/:userId/follow', protect, objectIdValidation('userId'), validate, followUser);
-router.delete('/:userId/follow', protect, objectIdValidation('userId'), validate, unfollowUser);
-router.get('/:userId/followers', objectIdValidation('userId'), validate, getFollowers);
-router.get('/:userId/following', objectIdValidation('userId'), validate, getFollowing);
+router.get('/:userId', apiLimiter, objectIdValidation('userId'), validate, getProfile);
+router.post('/:userId/follow', apiLimiter, protect, objectIdValidation('userId'), validate, followUser);
+router.delete('/:userId/follow', apiLimiter, protect, objectIdValidation('userId'), validate, unfollowUser);
+router.get('/:userId/followers', apiLimiter, objectIdValidation('userId'), validate, getFollowers);
+router.get('/:userId/following', apiLimiter, objectIdValidation('userId'), validate, getFollowing);
 
 module.exports = router;

@@ -13,11 +13,12 @@ const {
   loginValidation,
   validate
 } = require('../middleware/validator');
+const { authLimiter, apiLimiter } = require('../middleware/rateLimiter');
 
-router.post('/register', registerValidation, validate, register);
-router.post('/login', loginValidation, validate, login);
-router.get('/me', protect, getMe);
-router.put('/updatepassword', protect, updatePassword);
-router.post('/logout', protect, logout);
+router.post('/register', authLimiter, registerValidation, validate, register);
+router.post('/login', authLimiter, loginValidation, validate, login);
+router.get('/me', apiLimiter, protect, getMe);
+router.put('/updatepassword', apiLimiter, protect, updatePassword);
+router.post('/logout', apiLimiter, protect, logout);
 
 module.exports = router;

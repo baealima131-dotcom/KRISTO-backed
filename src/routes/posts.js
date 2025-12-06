@@ -19,15 +19,16 @@ const {
   objectIdValidation
 } = require('../middleware/validator');
 const upload = require('../config/multer');
+const { apiLimiter, uploadLimiter } = require('../middleware/rateLimiter');
 
-router.post('/', protect, upload.array('postImage', 5), createPostValidation, validate, createPost);
-router.get('/', getPosts);
-router.get('/user/:userId', objectIdValidation('userId'), validate, getUserPosts);
-router.get('/:id', objectIdValidation('id'), validate, getPost);
-router.put('/:id', protect, objectIdValidation('id'), createPostValidation, validate, updatePost);
-router.delete('/:id', protect, objectIdValidation('id'), validate, deletePost);
-router.post('/:id/like', protect, objectIdValidation('id'), validate, likePost);
-router.post('/:id/comments', protect, objectIdValidation('id'), createCommentValidation, validate, addComment);
-router.delete('/:id/comments/:commentId', protect, objectIdValidation('id'), validate, deleteComment);
+router.post('/', uploadLimiter, protect, upload.array('postImage', 5), createPostValidation, validate, createPost);
+router.get('/', apiLimiter, getPosts);
+router.get('/user/:userId', apiLimiter, objectIdValidation('userId'), validate, getUserPosts);
+router.get('/:id', apiLimiter, objectIdValidation('id'), validate, getPost);
+router.put('/:id', apiLimiter, protect, objectIdValidation('id'), createPostValidation, validate, updatePost);
+router.delete('/:id', apiLimiter, protect, objectIdValidation('id'), validate, deletePost);
+router.post('/:id/like', apiLimiter, protect, objectIdValidation('id'), validate, likePost);
+router.post('/:id/comments', apiLimiter, protect, objectIdValidation('id'), createCommentValidation, validate, addComment);
+router.delete('/:id/comments/:commentId', apiLimiter, protect, objectIdValidation('id'), validate, deleteComment);
 
 module.exports = router;

@@ -35,6 +35,7 @@ const modules = [
   { path: './src/middleware/auth', name: 'Auth Middleware' },
   { path: './src/middleware/errorHandler', name: 'Error Handler' },
   { path: './src/middleware/validator', name: 'Validator Middleware' },
+  { path: './src/middleware/rateLimiter', name: 'Rate Limiter Middleware' },
   
   // Utils
   { path: './src/utils/asyncHandler', name: 'Async Handler' },

@@ -14,12 +14,13 @@ const {
   validate,
   objectIdValidation
 } = require('../middleware/validator');
+const { apiLimiter, messageLimiter } = require('../middleware/rateLimiter');
 
-router.post('/', protect, sendMessageValidation, validate, sendMessage);
-router.get('/conversations', protect, getConversations);
-router.get('/unread/count', protect, getUnreadCount);
-router.get('/:userId', protect, objectIdValidation('userId'), validate, getMessages);
-router.put('/:id/read', protect, objectIdValidation('id'), validate, markAsRead);
-router.delete('/:id', protect, objectIdValidation('id'), validate, deleteMessage);
+router.post('/', messageLimiter, protect, sendMessageValidation, validate, sendMessage);
+router.get('/conversations', apiLimiter, protect, getConversations);
+router.get('/unread/count', apiLimiter, protect, getUnreadCount);
+router.get('/:userId', apiLimiter, protect, objectIdValidation('userId'), validate, getMessages);
+router.put('/:id/read', apiLimiter, protect, objectIdValidation('id'), validate, markAsRead);
+router.delete('/:id', apiLimiter, protect, objectIdValidation('id'), validate, deleteMessage);
 
 module.exports = router;
