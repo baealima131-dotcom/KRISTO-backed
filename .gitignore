@@ -110,6 +110,12 @@ dist
 # Serverless directories
 .serverless/
 
+# Uploads (keep folder structure but ignore files)
+uploads/**/*
+!uploads/images/
+!uploads/videos/
+!uploads/.gitkeep
+
 # FuseBox cache
 .fusebox/
 
