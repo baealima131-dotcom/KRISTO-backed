@@ -9,6 +9,7 @@ const {
 } = require('../controllers/messageController');
 const { protect } = require('../middleware/auth');
 const { validate } = require('../middleware/validation');
+const { apiLimiter } = require('../middleware/rateLimit');
 
 const router = express.Router();
 
@@ -25,10 +26,10 @@ const messageValidation = [
 ];
 
 // Routes
-router.post('/', protect, messageValidation, validate, sendMessage);
-router.get('/conversations', protect, getConversations);
-router.get('/conversation/:userId', protect, getConversation);
-router.put('/:id/read', protect, markAsRead);
-router.delete('/:id', protect, deleteMessage);
+router.post('/', protect, apiLimiter, messageValidation, validate, sendMessage);
+router.get('/conversations', protect, apiLimiter, getConversations);
+router.get('/conversation/:userId', protect, apiLimiter, getConversation);
+router.put('/:id/read', protect, apiLimiter, markAsRead);
+router.delete('/:id', protect, apiLimiter, deleteMessage);
 
 module.exports = router;

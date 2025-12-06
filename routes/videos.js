@@ -12,6 +12,7 @@ const {
 const { protect } = require('../middleware/auth');
 const { validate } = require('../middleware/validation');
 const { uploadVideo, handleUpload } = require('../middleware/upload');
+const { apiLimiter, uploadLimiter } = require('../middleware/rateLimit');
 
 const router = express.Router();
 
@@ -29,12 +30,12 @@ const videoValidation = [
 ];
 
 // Routes
-router.post('/', protect, uploadVideo, handleUpload, videoValidation, validate, createVideo);
-router.get('/', getVideos);
-router.get('/:id', getVideo);
-router.get('/user/:userId', getUserVideos);
-router.put('/:id', protect, videoValidation, validate, updateVideo);
-router.delete('/:id', protect, deleteVideo);
-router.put('/:id/like', protect, likeVideo);
+router.post('/', protect, uploadLimiter, uploadVideo, handleUpload, videoValidation, validate, createVideo);
+router.get('/', apiLimiter, getVideos);
+router.get('/:id', apiLimiter, getVideo);
+router.get('/user/:userId', apiLimiter, getUserVideos);
+router.put('/:id', protect, apiLimiter, videoValidation, validate, updateVideo);
+router.delete('/:id', protect, apiLimiter, deleteVideo);
+router.put('/:id/like', protect, apiLimiter, likeVideo);
 
 module.exports = router;

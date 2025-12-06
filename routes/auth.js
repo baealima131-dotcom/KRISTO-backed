@@ -10,6 +10,7 @@ const {
 } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 const { validate } = require('../middleware/validation');
+const { authLimiter } = require('../middleware/rateLimit');
 
 const router = express.Router();
 
@@ -48,8 +49,8 @@ const updatePasswordValidation = [
 ];
 
 // Routes
-router.post('/register', registerValidation, validate, register);
-router.post('/login', loginValidation, validate, login);
+router.post('/register', authLimiter, registerValidation, validate, register);
+router.post('/login', authLimiter, loginValidation, validate, login);
 router.get('/me', protect, getMe);
 router.put('/updatedetails', protect, updateDetails);
 router.put('/updatepassword', protect, updatePasswordValidation, validate, updatePassword);

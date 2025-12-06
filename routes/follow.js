@@ -8,14 +8,15 @@ const {
   getPendingRequests,
 } = require('../controllers/followController');
 const { protect } = require('../middleware/auth');
+const { apiLimiter } = require('../middleware/rateLimit');
 
 const router = express.Router();
 
-router.post('/:userId', protect, followUser);
-router.delete('/:userId', protect, unfollowUser);
-router.get('/followers/:userId', getFollowers);
-router.get('/following/:userId', getFollowing);
-router.put('/accept/:followId', protect, acceptFollowRequest);
-router.get('/requests', protect, getPendingRequests);
+router.post('/:userId', protect, apiLimiter, followUser);
+router.delete('/:userId', protect, apiLimiter, unfollowUser);
+router.get('/followers/:userId', apiLimiter, getFollowers);
+router.get('/following/:userId', apiLimiter, getFollowing);
+router.put('/accept/:followId', protect, apiLimiter, acceptFollowRequest);
+router.get('/requests', protect, apiLimiter, getPendingRequests);
 
 module.exports = router;

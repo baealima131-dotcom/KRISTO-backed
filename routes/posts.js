@@ -11,6 +11,7 @@ const {
 } = require('../controllers/postController');
 const { protect } = require('../middleware/auth');
 const { validate } = require('../middleware/validation');
+const { apiLimiter } = require('../middleware/rateLimit');
 
 const router = express.Router();
 
@@ -23,12 +24,12 @@ const postValidation = [
 ];
 
 // Routes
-router.post('/', protect, postValidation, validate, createPost);
-router.get('/', getPosts);
-router.get('/:id', getPost);
-router.get('/user/:userId', getUserPosts);
-router.put('/:id', protect, postValidation, validate, updatePost);
-router.delete('/:id', protect, deletePost);
-router.put('/:id/like', protect, likePost);
+router.post('/', protect, apiLimiter, postValidation, validate, createPost);
+router.get('/', apiLimiter, getPosts);
+router.get('/:id', apiLimiter, getPost);
+router.get('/user/:userId', apiLimiter, getUserPosts);
+router.put('/:id', protect, apiLimiter, postValidation, validate, updatePost);
+router.delete('/:id', protect, apiLimiter, deletePost);
+router.put('/:id/like', protect, apiLimiter, likePost);
 
 module.exports = router;

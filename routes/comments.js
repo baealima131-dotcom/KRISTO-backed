@@ -10,6 +10,7 @@ const {
 } = require('../controllers/commentController');
 const { protect } = require('../middleware/auth');
 const { validate } = require('../middleware/validation');
+const { apiLimiter } = require('../middleware/rateLimit');
 
 const router = express.Router();
 
@@ -23,11 +24,11 @@ const commentValidation = [
 ];
 
 // Routes
-router.post('/', protect, commentValidation, validate, createComment);
-router.get('/post/:postId', getPostComments);
-router.get('/video/:videoId', getVideoComments);
-router.put('/:id', protect, commentValidation, validate, updateComment);
-router.delete('/:id', protect, deleteComment);
-router.put('/:id/like', protect, likeComment);
+router.post('/', protect, apiLimiter, commentValidation, validate, createComment);
+router.get('/post/:postId', apiLimiter, getPostComments);
+router.get('/video/:videoId', apiLimiter, getVideoComments);
+router.put('/:id', protect, apiLimiter, commentValidation, validate, updateComment);
+router.delete('/:id', protect, apiLimiter, deleteComment);
+router.put('/:id/like', protect, apiLimiter, likeComment);
 
 module.exports = router;
